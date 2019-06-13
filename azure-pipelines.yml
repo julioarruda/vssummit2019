@@ -1,0 +1,55 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
+- task: Npm@1
+  inputs:
+    command: 'install'
+    workingDir: 'src/MyHealth.Web'
+
+- task: Bower@0
+  inputs:
+    command: 'install'
+    bowerjson: 'src/MyHealth.Web/bower.json'
+
+- task: Gulp@1
+  inputs:
+    gulpFile: 'src/MyHealth.Web/gulpfile.js'
+    targets: 
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(build.sourcesdirectory)'
+    Contents: '**/*.json'
+    TargetFolder: '$(build.artifactstagingdirectory)'
+
+- task: PublishPipelineArtifact@0
+  inputs:
+    targetPath: '$(build.artifactstagingdirectory)'
