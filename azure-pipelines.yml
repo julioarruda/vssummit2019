@@ -18,21 +18,6 @@ steps:
     command: 'restore'
     projects: '**/*.csproj'
 
-- task: Npm@1
-  inputs:
-    command: 'install'
-    workingDir: 'src/MyHealth.Web'
-
-- task: Bower@0
-  inputs:
-    command: 'install'
-    bowerjson: 'src/MyHealth.Web/bower.json'
-
-- task: Gulp@1
-  inputs:
-    gulpFile: 'src/MyHealth.Web/gulpfile.js'
-    targets: 
-
 - task: DotNetCoreCLI@2
   inputs:
     command: 'build'
