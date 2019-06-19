@@ -40,3 +40,37 @@ stages:
     - task: PublishPipelineArtifact@0
       inputs:
         targetPath: '$(build.artifactstagingdirectory)'
+
+- stage: Deploy
+  displayName: Deploy stage
+  jobs:
+  - deployment: deploy
+    displayName: Deploy job
+    environment: 'myFirstEnvironment'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@1
+            inputs:
+              artifactName: 'drop'
+
+          - task: AzureAppServiceManage@0
+            inputs:
+              ConnectedServiceName: 'Visual Studio Enterprise (84261ad2-9073-4045-8bd1-f2f859e0b0c1)'
+              Action: 'Stop Azure App Service'
+              WebAppName: 'vssummit2019'   
+
+          - task: AzureRmWebAppDeployment@4
+            inputs:
+              ConnectedServiceName: 'Visual Studio Enterprise (84261ad2-9073-4045-8bd1-f2f859e0b0c1)'
+              WebAppName: 'vssummit2019'
+              Package: '$(System.ArtifactsDirectory)/**/*.zip'
+
+          - task: AzureAppServiceManage@0
+            inputs:
+              ConnectedServiceName: 'Visual Studio Enterprise (84261ad2-9073-4045-8bd1-f2f859e0b0c1)'
+              Action: 'Start Azure App Service'
+              WebAppName: 'vssummit2019'
+
+          
