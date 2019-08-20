@@ -73,7 +73,7 @@ src/MyHealth.Web/wwwroot/_references.js
 src/MyHealth.Web.Stress/wwwroot/
 src/MyHealth.Web.Stress/content/lib/
 *.orig
-
+#
 
 
 /src/MyHealth.Client.Cordova/plugins/
