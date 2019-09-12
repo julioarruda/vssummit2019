@@ -1,8 +1,9 @@
-#Approver to .github files
-.github/ julioarruda
 
 #approver for everything
 * @julioarruda2
+
+#Approver to .github files
+/.github/ @julioarruda
 
 
 
