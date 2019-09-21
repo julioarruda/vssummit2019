@@ -22,9 +22,10 @@ jobs:
 
 
     - name: Dotnet Publish
-      run: dotnet publish --configuration Release
+      run: dotnet publish --configuration Release -o vssummit 
       
     - uses: azure/webapps-deploy@v1
       with: 
         app-name: vssummit2019
         publish-profile: ${{ secrets.azureWebAppPublishProfile }}
+        package: './vssummit' 
